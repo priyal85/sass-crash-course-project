@@ -1,0 +1,95 @@
+//Simple mixin
+@mixin flex {
+  // write the css here
+  display: -webkit-flex;
+  display: flex;
+  color: rgb(188, 144, 238);
+}
+
+@mixin padding($values) {    
+  @each $var in $values {
+      padding: #{$var};
+  }
+}
+
+@mixin padding-spread($values...) {    
+  @each $var in $values {
+      padding: #{$var};
+  }
+}
+
+a {
+  @include flex;
+  @include padding-spread(2px 4px 6px);
+}
+
+//mixins with arguments. Default value for flex is set as  'false'
+@mixin grid($flex: false) {
+  @if $flex {
+      @include flex;
+  } @else {
+      display: grid;
+  }
+}
+
+.grid-container {
+ @include grid; //equalent to @include grid(false);
+  grid-template-columns: auto auto auto auto;
+  background-color: #2196F3;
+  padding: 10px;
+}
+
+.grid-container-flex {
+  @include grid(true);
+   grid-template-columns: auto auto auto;
+   background-color: #2196F3;
+   padding: 10px;
+ }
+
+.grid-item {
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.8);
+  padding: 20px;
+  text-align: center;
+  font-size: 30px;
+}
+
+.flex-grid-item {
+  background-color: #f1f1f1;
+  width: 100px;
+  margin: 10px;
+  line-height: 75px;
+  text-align: center;
+  font-size: 30px;
+}
+//More examples with spread operator
+$style1: 100%, 70px, #f06d06;
+$style2: (background: #bada55, width: 100%, height: 100px);
+$style3: 50%, 70px, #66a123;
+$style4: (background: #b750cc, width: 50%, height: 100px);
+@mixin box($width, $height, $background) {
+    width: $width;
+    height: $height;
+    background-color: $background;
+}
+
+
+@mixin small {
+  @media only screen and (max-width: 820px) {
+      @content;
+  }
+}
+.b1 {
+    @include box($style1...);
+    @include small{
+      @include box($style3...);
+    }
+}
+
+.b2 {
+    @include box($style2...);
+    @include small{
+      @include box($style4...);
+    }
+}
+//Usage of @content with media quaries to adjust the behavior dynamically
